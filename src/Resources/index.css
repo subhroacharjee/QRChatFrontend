@@ -27,3 +27,6 @@ html{
 .clickable-text {
   cursor: pointer;
 }
+.heading-1 {
+  font-size: 3rem!important;
+}

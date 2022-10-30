@@ -1,29 +1,44 @@
 import validateEmail from "../../Common/Validators/EmailValidator";
-import validatePassword from "../../Common/Validators/PasswordValidator";
+import { emailLogin } from '../../Server/AuthRequests';
 
 
-const LoginController = (email, password, remember, setEmailError, setPasswordError) => {
+const LoginController = ({email, password, remember}, [setEmailError, setPasswordError], callback) => {
     
-    var proced = true;
+    var proceed = true;
     if (!validateEmail(email)) {
         setEmailError({
             error: true,
             message:"Please check the email"
         });
-        proced = false;
+        proceed = false;
     }
-    var valPass= validatePassword(password);
-    if (valPass !== null) {
-        proced = true;
-        setPasswordError({
-            error: true,
-            message: valPass
-        });
-    }
-
     if (remember !== true) remember = false;
 
-    if (!proced) return false;
+    if (!proceed) return false;
+
+    emailLogin({
+        email,
+        password,
+        remember
+    }).then(data => {
+        if (data.err !== null) {
+            if (data.err._global) alert(data.err._global[0]);
+            if (data.err.email) setEmailError({
+                error: true,
+                message: data.err.email[0]
+            });
+
+            if (data.err.password) setPasswordError({
+                error: true,
+                message: data.err.password
+            });
+
+            if (data.err.remember) alert('Please check the input again');
+
+            return;
+        }
+        callback(data.data);
+    }).catch(err => console.error(err));
 
     return true;
 }

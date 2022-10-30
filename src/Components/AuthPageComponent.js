@@ -7,7 +7,7 @@ const AuthSiteComponent = (props) => {
     }
    return ( <Container className="" fluid>
             <Row className="">
-                {props.left && <Col xs="6" md="3" className="p-0 m-0">
+                {props.left && <Col xs="10" md="6" className="p-0 m-0">
                     <Container fluid className="full-height p-0">
                     <Container fluid className="h-25 text-center d-flex justify-content-center clickable-text" onClick={handleClick}>
                         <p className="text-muted pt-2">{props.message[0]}</p> <p className="text-dark pt-2">{props.message[1]}</p>
@@ -17,8 +17,8 @@ const AuthSiteComponent = (props) => {
             </Container>
                     </Container>
                 </Col> }
-                <Col xs="6" md="9" className="bg-secondary-1"></Col>
-                {props.left || <Col xs="6" md="3" className="p-0 m-0">
+                <Col xs="2" md="6" className="bg-secondary-1"></Col>
+                {props.left || <Col xs="10" md="6" className="p-0 m-0">
                     <Container fluid className="full-height p-0">
                     <Container fluid className="h-25 text-center d-flex justify-content-center clickable-text" onClick={handleClick}>
                         <p className="text-muted pt-2">{props.message[0]}</p> <p className="text-dark pt-2">{props.message[1]}</p>

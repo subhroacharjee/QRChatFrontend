@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { getCurrentUser } from "../../Server/AuthRequests";
 import { useLocalStorage } from "./LocalStorage";
 const AuthContext = createContext();
 
@@ -10,10 +12,17 @@ export const AuthProvider = ({ children }) => {
     const [getUser, setUser] = useLocalStorage('user', null);
     const [getAccessToken, setAccessToken] = useLocalStorage('accessToken', null);
     const checkUserSession = async() => {
-        console.log(getAccessToken());
-        if (getAccessToken() === null) return false;
+        const accessToken = getAccessToken();
+        if (accessToken === null) return false;
         // this will shoot an api to check if the access token is valid or not
         // if access token is valid api will send user and we will store user in localstorage
+        var data = await getCurrentUser(accessToken);
+        if (data.err !== null || !data.data || !data.data._id) {
+            setUser(null);
+            setAccessToken(null);
+            return false;
+        }
+        setUser(data.data);
         return true;
     }
 

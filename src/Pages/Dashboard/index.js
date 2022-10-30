@@ -1,6 +1,10 @@
+import HeaderComponent from "../../Components/HeaderComponent";
+
 const DashBoard = () => {
     return (
-        <h1>Hello World</h1>
+        <>
+            <HeaderComponent/>
+        </>
     )
 }
 export default DashBoard;

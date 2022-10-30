@@ -1,23 +1,43 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Container, Form, Button } from "react-bootstrap";
 import AuthSiteComponent from "../../Components/AuthPageComponent";
 import signupController from './Controller';
-import { ErrorDefaultStructure } from '../../Common/Constants/InitialStates';
+import { ErrorDefaultObject } from '../../Common/Constants/InitialStates';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../Common/Hooks/AuthProvider';
 
 const SignUp = (props) => {
     const navigate = useNavigate();
+    const { addUserSession } = useAuth();
 
     const [username, setUsername] = useState();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
 
-    const [usernameErr, setUsernameError] = useState(ErrorDefaultStructure);
-    const [emailError, setEmailError] = useState(ErrorDefaultStructure);
-    const [passwordError, setPasswordError] = useState(ErrorDefaultStructure);
+    const [usernameErr, setUsernameError] = useState(ErrorDefaultObject);
+    const [emailError, setEmailError] = useState(ErrorDefaultObject);
+    const [passwordError, setPasswordError] = useState(ErrorDefaultObject);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setUsernameError(ErrorDefaultObject);
+            setEmailError(ErrorDefaultObject);
+            setPasswordError(ErrorDefaultObject);
+        }, 8000)
+    }, [usernameErr, emailError, passwordError]);
+
+    const signUpCallback = (data) => {
+        const accessToken = data.access_token;
+        const userData = data;
+        delete userData.access_token;
+        addUserSession(userData, accessToken);
+        navigate('/profile', { // TODO to change to profile than /
+            replace: true
+        });
+    }
 
     const signup = () => {
-        if (!signupController({
+        signupController({
             username,
             email,
             password
@@ -25,13 +45,7 @@ const SignUp = (props) => {
             setUsernameError,
             setEmailError,
             setPasswordError
-        ])) {
-            setTimeout(() => {
-                setUsernameError(ErrorDefaultStructure);
-                setEmailError(ErrorDefaultStructure);
-                setPasswordError(ErrorDefaultStructure);
-            }, 4000)
-        }
+        ], signUpCallback);
     }
 
     const gotoLogin = () => {
@@ -69,15 +83,6 @@ const SignUp = (props) => {
                 <Container className="d-grid p-0 mb-3" fluid>
                     <Button variant="primary" size="lg" onClick={signup}>
                         Sign Up
-                    </Button>
-                </Container>
-                
-                <Container fluid className="d-flex justify-content-around p-0">
-                    <Button variant="danger">
-                        Sign Up With Google
-                    </Button>
-                    <Button variant="secondary">
-                        Sign Up With Github
                     </Button>
                 </Container>
             </Form>

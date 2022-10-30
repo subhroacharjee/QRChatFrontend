@@ -1,29 +1,41 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Container, Form } from "react-bootstrap";
 import AuthPageComponent from '../../Components/AuthPageComponent';
 import loginController from './Controller';
-import { ErrorDefaultStructure } from "../../Common/Constants/InitialStates";
+import { ErrorDefaultObject } from "../../Common/Constants/InitialStates";
+import { useAuth } from "../../Common/Hooks/AuthProvider";
 
 const LoginPage = (props) => {
     const navigate = useNavigate();
-   
+    const { addUserSession } = useAuth();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [remember, setRemember] = useState(false);
 
-    const [emailError, setEmailError] = useState(ErrorDefaultStructure);
+    const [emailError, setEmailError] = useState(ErrorDefaultObject);
 
-    const [passwordError, setPasswordError] = useState(ErrorDefaultStructure);
+    const [passwordError, setPasswordError] = useState(ErrorDefaultObject);
+
+    const loginCallback = (data) => {
+        const accessToken = data.access_token;
+        const userData = data;
+        delete userData.access_token;
+        addUserSession(userData, accessToken);
+        navigate('/', {
+            replace: true
+        });
+    }
+
+    useEffect(() => {
+        setTimeout(() => {
+            setEmailError(ErrorDefaultObject);
+            setPasswordError(ErrorDefaultObject);
+        }, 8000)
+    }, [emailError, passwordError]);
 
     const login = () => {
-        if (!loginController(email, password, remember, setEmailError, setPasswordError)) {
-            setTimeout(() => {
-                setEmailError(ErrorDefaultStructure);
-                setPasswordError(ErrorDefaultStructure);
-            }, 4000)
-        }
-
+        loginController({email, password, remember}, [setEmailError, setPasswordError], loginCallback)
     }
 
     const gotoSignUp = () => {
@@ -61,14 +73,6 @@ const LoginPage = (props) => {
                     <div className="text-muted clickable-text">
                         Forget Password?
                     </div>
-                </Container>
-                <Container fluid className="d-flex justify-content-around p-0">
-                    <Button variant="danger">
-                        Sign In With Google
-                    </Button>
-                    <Button variant="secondary">
-                        Sign In With Github
-                    </Button>
                 </Container>
             </Form>
         </AuthPageComponent>
