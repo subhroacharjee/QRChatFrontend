@@ -21,7 +21,7 @@ function HeaderComponent() {
           <Nav className="me-auto">
             <Nav.Link onClick={() => navigate('/profile')}>Profile</Nav.Link>
 			<Nav.Link onClick={() => navigate('/requests')}>Requests</Nav.Link>
-			<Nav.Link onClick={() => navigate('/search')}>Search</Nav.Link>
+	
 			<Nav.Link onClick={() => navigate('/connections')}>Connections</Nav.Link>
           </Nav>
           <Nav>
