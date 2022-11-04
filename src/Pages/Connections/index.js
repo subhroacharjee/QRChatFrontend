@@ -1,15 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, Container, ListGroup, Button } from "react-bootstrap";
+import { useLocalStorage } from "../../Common/Hooks/LocalStorage";
 import HeaderComponent from "../../Components/HeaderComponent";
+import { deleteConnectionController, fetchConnectionList } from "./Controller";
 
 const ConnectionPage = (props) => {
-	const [connections, setConnections] = useState([
-		{
-			_id: 'id',
-			username: 'username',
-			uniqueId: '#username'
-		}
-	]);
+	const [connections, setConnections] = useState([]);
+	const [getAccessToken, setAccessToken] = useLocalStorage('accessToken');
+
+	useEffect(() => {
+		fetchConnectionList(getAccessToken(), setConnections);
+	},[]);
+
+
 
 	const renderConnectionListItem = (connection) => {
 		return (
@@ -18,15 +21,16 @@ const ConnectionPage = (props) => {
 					<div className='fw-bold'>{connection.username}</div>
 					id: {connection.uniqueId}
 				</div>
-				<Button variant='danger' className='mr-2' onClick={() => removeConnectionHandler(connection._id)}>Remove</Button>
+				<Button variant='danger' className='mr-2' onClick={() => removeConnectionHandler(connection._id, connection.connectionKey)}>Remove</Button>
 		</ListGroup.Item>
 		);
 	}
 
-	const removeConnectionHandler = (_id) => {
+	const removeConnectionHandler = (_id, connectionKey) => {
 		if (window.confirm('Do you want remove connection? (all chats will be deleted)')) {
 			setConnections(connections.filter(conn => conn._id !== _id));
 			// call server;
+			deleteConnectionController(connectionKey, getAccessToken());
 		}
 	}
 
