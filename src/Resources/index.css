@@ -31,3 +31,12 @@ html{
 .heading-1 {
   font-size: 3rem!important;
 }
+
+.thumbnail-size {
+  width: 80px;
+  height: 80px;
+}
+
+.height-75 {
+  height: 75vh;
+}
