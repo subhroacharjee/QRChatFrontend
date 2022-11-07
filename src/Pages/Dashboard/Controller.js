@@ -7,6 +7,7 @@ export const GetUserListController = async(accessToken, setUserList) => {
 			if (response.err) {
 				alert(response.err._global[0]);
 			}
+			console.log(response.data);
 			setUserList(response.data);
 		}).catch(err => {
 			console.error(err);
