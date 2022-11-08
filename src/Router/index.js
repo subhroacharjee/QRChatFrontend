@@ -9,10 +9,10 @@ import ConnectionPageRoute from '../Pages/Connections/Router';
 const router = [
     LoginRoute,
     SignUpRoute,
-    DashBoardRoute,
     ProfileRoute,
     RequestsRouter,
-    ConnectionPageRoute
+    ConnectionPageRoute,
+    DashBoardRoute
 ];
 
 export default router;

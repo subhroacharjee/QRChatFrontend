@@ -3,11 +3,14 @@ import { createContext, useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCurrentUser } from "../../Server/AuthRequests";
 import { useLocalStorage } from "./LocalStorage";
+import { useDispatch } from "react-redux";
+import { initialize } from "../../StateManager/socket";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     // what do i want this hook to do?
     // just check if the user is validated?
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [getUser, setUser] = useLocalStorage('user', null);
     const [getAccessToken, setAccessToken] = useLocalStorage('accessToken', null);
@@ -22,6 +25,7 @@ export const AuthProvider = ({ children }) => {
             setAccessToken(null);
             return false;
         }
+       
         setUser(data.data);
         return true;
     }
@@ -29,6 +33,7 @@ export const AuthProvider = ({ children }) => {
     const addUserSession = (data, access_token) => {
         setAccessToken(access_token);
         setUser(data);
+        dispatch(initialize(access_token));
     }
 
     const removeUserSession = () => {

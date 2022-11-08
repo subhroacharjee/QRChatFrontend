@@ -6,6 +6,6 @@ const DashBoardRoute = {
     element: <PrivateRouter>
                 <DashBoard />
             </PrivateRouter>
-}
+};
 
 export default DashBoardRoute;

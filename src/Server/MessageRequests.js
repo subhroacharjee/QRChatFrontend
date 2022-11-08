@@ -14,9 +14,10 @@ export const getMessage = async(roomKey, skip, accessToken) => {
 	};
 	skip = skip | 0;
 
-	const queryString = '?roomKeys=' + JSON.stringify(roomKeys);
+	const queryString = '?roomKeys=' + encodeURIComponent(JSON.stringify(roomKeys));
 
 	const uri = `${RequeutsBaseUri}${queryString}`;
+	console.log(uri);
 
 	try {
 		const response = await axios.get(uri, requestOption);

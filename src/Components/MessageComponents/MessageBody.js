@@ -15,7 +15,7 @@ const MessageBodyComponent = (props) => {
 
 
 	const renderMessage = (msg) => {
-	
+		
 		const isMyMessage = currentUser._id === msg.sender._id;
 		return (
 			<>
